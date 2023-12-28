@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FeliCa History Reader</string>
+    <string name="tag_card">\n스마트폰의 NFC 기능을 활성화시키고,\n스마트폰 뒷면에 교통카드를 태그하세요.</string>
+    <string name="not_felica">태그된 카드가 Suica 호환 교통카드가 아닌 것 같아요.</string>
+</resources>
