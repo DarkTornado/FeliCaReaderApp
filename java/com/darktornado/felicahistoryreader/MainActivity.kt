@@ -4,14 +4,12 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.NfcF
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import com.darktornado.library.FeliCa
 import java.util.*
@@ -21,6 +19,21 @@ class MainActivity : Activity() {
     var layout: LinearLayout? = null
     private var adapter: NfcAdapter? = null
     private var intent: PendingIntent? = null
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            0 -> startActivity(Intent(this, LicenseActivity::class.java))
+            1 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DarkTornado/FeliCaReaderApp")))
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menu.add(0, 0, 0, "라이선스 정보")
+        menu.add(0, 1, 0, "깃허브로 이동")
+        return true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
