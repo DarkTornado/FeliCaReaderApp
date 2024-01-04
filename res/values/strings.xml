@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">FeliCa History Reader</string>
+    <string name="main_activity_name">IC카드 사용기록 조회 (FeliCa 기반)</string>
+    <string name="license_activity_name">오픈 소스 라이선스</string>
     <string name="tag_card">\n스마트폰의 NFC 기능을 활성화시키고,\n스마트폰 뒷면에 교통카드를 태그하세요.</string>
     <string name="not_felica">태그된 카드가 Suica 호환 교통카드가 아닌 것 같아요.</string>
     <string name="card_read">카드 정보를 불러왔어요.</string>

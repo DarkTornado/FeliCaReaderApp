@@ -24,7 +24,12 @@ class MainActivity : Activity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             0 -> startActivity(Intent(this, LicenseActivity::class.java))
-            1 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DarkTornado/FeliCaReaderApp")))
+            1 -> startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://github.com/DarkTornado/FeliCaReaderApp")
+                )
+            )
         }
         return super.onOptionsItemSelected(item)
     }
@@ -114,8 +119,11 @@ class MainActivity : Activity() {
 
                 val item = data[pos]
                 val icon = ImageView(ctx)
-                if (item.action.contains("충전") || item.action.contains("신규")) icon.setImageDrawable(icons[4])
-                else icon.setImageDrawable(icons[item.type])
+                if (item.action.contains("충전") || item.action.contains("신규")) {
+                    icon.setImageDrawable(icons[4])
+                } else {
+                    icon.setImageDrawable(icons[item.type])
+                }
 
                 val params = LinearLayout.LayoutParams(dip2px(64), dip2px(64), 1f)
                 params.setMargins(dip2px(8), 0, dip2px(16), 0)

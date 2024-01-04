@@ -14,12 +14,18 @@ class LicenseActivity : Activity() {
 
         val lice = LicenseView(this)
         lice.setTitle("Material Design")
-        lice.setSubtitle("Google")
-        lice.setLicense("Apache License 2.0","icon.txt")
+        lice.setSubtitle("by Google")
+        lice.setLicense("Apache License 2.0", "icon.txt")
         layout.addView(lice)
+
+        val pad = dip2px(16)
+        layout.setPadding(pad, pad, pad, pad);
 
         val scroll = ScrollView(this)
         scroll.addView(layout)
         setContentView(scroll)
     }
+
+    private fun dip2px(dips: Int) = Math.ceil((dips * this.resources.displayMetrics.density).toDouble()).toInt()
+
 }

@@ -12,13 +12,16 @@
         android:theme="@style/Theme.FeliCaHistoryReader">
         <activity
             android:name=".MainActivity"
+            android:label="@string/main_activity_name"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LicenseActivity"></activity>
+        <activity android:name=".LicenseActivity"
+            android:label="@string/license_activity_name">
+        </activity>
     </application>
 
 </manifest>
