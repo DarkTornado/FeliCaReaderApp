@@ -32,7 +32,8 @@ public class LicenseView extends LinearLayout {
     public void setLicense(final String name, String path) {
         final String value = loadLicense(path);
         if (value.length() > 1500) {
-            license.setText(Html.fromHtml(value.substring(0, 1500).replace("\n", "<br>") + "...<font color='#757575'><b>[Show All]</b></font>"));
+            license.setText(Html.fromHtml(value.substring(0, 1500).replace("\n", "<br>") +
+                    "...<font color='#757575'><b>[Show All]</b></font>"));
             license.setOnClickListener(v -> showDialog(name, value));
         } else {
             license.setText(value);
