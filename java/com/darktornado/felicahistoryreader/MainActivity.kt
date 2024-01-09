@@ -63,39 +63,22 @@ class MainActivity : Activity() {
             val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) ?: return
 
             val id = tag.id ?: return
-            val fc = NfcF.get(tag) ?: return
+            val nf = NfcF.get(tag) ?: return
 
-            fc.connect()
-            val req = FeliCa.readWithoutEncryption(id, 10)
-            val res = fc.transceive(req)
-            fc.close()
-            parseHistory(res)
+            val fc = FeliCa(nf, id)
+            applyResult(fc.history)
+
         } catch (e: Exception) {
             toast(e.toString())
         }
     }
 
-    private fun parseHistory(res: ByteArray) {
-        val zero = 0x00;
-        if (res[10] != zero.toByte()) {
-            toast(getString(R.string.not_felica))
-            return
-        }
-        val size = res[12].toInt()
-        val data = ArrayList<History>()
-        for (n in 0 until size) {
-            val fc = FeliCa.parse(res, 13 + n * 16)
-            if (fc.index > 0) data.add(History(fc))
-        }
-        applyResult(data.toTypedArray())
-    }
-
-    private fun applyResult(data: Array<History>) {
+    private fun applyResult(data: Array<FeliCa.History>) {
         val icons = arrayOfNulls<Drawable>(5)
-        icons[FeliCa.TYPE_JR] = resources.getDrawable(R.drawable.metro)
-        icons[FeliCa.TYPE_METRO] = icons[FeliCa.TYPE_JR]
-        icons[FeliCa.TYPE_BUS] = resources.getDrawable(R.drawable.bus)
-        icons[FeliCa.TYPE_GOODS] = resources.getDrawable(R.drawable.shopping)
+        icons[FeliCa.History.TYPE_JR] = resources.getDrawable(R.drawable.metro)
+        icons[FeliCa.History.TYPE_METRO] = icons[FeliCa.History.TYPE_JR]
+        icons[FeliCa.History.TYPE_BUS] = resources.getDrawable(R.drawable.bus)
+        icons[FeliCa.History.TYPE_GOODS] = resources.getDrawable(R.drawable.shopping)
         icons[4] = resources.getDrawable(R.drawable.charge)
 
         val adapter = object : BaseAdapter() {
