@@ -1,7 +1,11 @@
 package com.darktornado.felicahistoryreader
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.PendingIntent
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -12,19 +16,19 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import com.darktornado.library.FeliCa
-import java.util.*
 
 class MainActivity : Activity() {
 
-    var layout: LinearLayout? = null
+    private var layout: LinearLayout? = null
     private var adapter: NfcAdapter? = null
     private var intent: PendingIntent? = null
-
+    private var card: FeliCa? = null
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            0 -> startActivity(Intent(this, LicenseActivity::class.java))
-            1 -> startActivity(
+            0 -> showDialog()
+            1 -> startActivity(Intent(this, LicenseActivity::class.java))
+            2 -> startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
                     Uri.parse("https://github.com/DarkTornado/FeliCaReaderApp")
@@ -35,8 +39,9 @@ class MainActivity : Activity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add(0, 0, 0, "라이선스 정보")
-        menu.add(0, 1, 0, "깃허브로 이동")
+        menu.add(0, 0, 0, "스캔한 카드 정보")
+        menu.add(0, 1, 0, "라이선스 정보")
+        menu.add(0, 2, 0, "깃허브로 이동")
         return true
     }
 
@@ -65,8 +70,8 @@ class MainActivity : Activity() {
             val id = tag.id ?: return
             val nf = NfcF.get(tag) ?: return
 
-            val fc = FeliCa(nf, id)
-            applyResult(fc.history)
+            card = FeliCa(nf, id)
+            applyResult(card!!.history)
 
         } catch (e: Exception) {
             toast(e.toString())
@@ -162,8 +167,22 @@ class MainActivity : Activity() {
         if (adapter != null) adapter!!.disableForegroundDispatch(this)
     }
 
+    private fun showDialog() {
+        val msg = "Manufacturer: " + card!!.manu + "\nAll: " + card!!.result
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle("스캔한 카드 정보")
+        dialog.setMessage(msg)
+        dialog.setNegativeButton("닫기", null)
+        dialog.setPositiveButton("복사") { _dialog, i ->
+            val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager;
+            cm.setPrimaryClip(ClipData.newPlainText("label", msg))
+            toast("클립보드에 복사되었어요")
+        }
+        dialog.show()
+    }
+
     private fun dip2px(dips: Int) = Math.ceil((dips * this.resources.displayMetrics.density).toDouble()).toInt()
 
-    fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    private fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
 }

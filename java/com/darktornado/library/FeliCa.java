@@ -10,12 +10,12 @@ public class FeliCa {
 
     private final SparseArray<String> deviceList = new SparseArray<>(),
             actionList = new SparseArray<>();
-    public String id, balance;
+    public String id, balance, diff;
     public History[] history;
 
+    public String result, manu;
+
     public FeliCa(NfcF nf, byte[] id) throws Exception {
-//        byte[] systemCode = nf.getSystemCode();
-//        Log.i(Nusty.TAG, bytesToHex(nf.getManufacturer()));
         nf.connect();
         initList();
         ArrayList<History> histories = new ArrayList<>();
@@ -23,6 +23,8 @@ public class FeliCa {
         byte[] data = nf.transceive(createCommand(id, 0, count));
         String data_str = bytes2hex(data);
 //        응답길이 응답코드 id(제조자코드+카드식별번호) 상태flag1.0 상태flag2.0 블록수 사용내역
+        result = data_str;
+        manu = bytes2hex(nf.getManufacturer());
 
         this.id = data_str.substring(4, 4 + 16);
         parseHistory(data, count, histories);
@@ -31,7 +33,13 @@ public class FeliCa {
         nf.close();
 
         if (history.length == 0) balance = "null";
-        else balance = history[0].balance + "円";
+        else balance = history[0].balance+ "";
+        if (history.length > 2) {
+            int now = history[0].balance - history[1].balance;
+            diff = (now > 0 ? "+" : "") + now;
+        } else {
+            diff = "null";
+        }
     }
 
 
