@@ -59,7 +59,7 @@ class MainActivity : Activity() {
 
         adapter = NfcAdapter.getDefaultAdapter(this)
         val intent = Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        this.intent = PendingIntent.getActivity(this, 0, intent, 0)
+        this.intent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
     }
 
     override fun onNewIntent(intent: Intent) {
